@@ -6,6 +6,7 @@ from sqlalchemy import text
 
 from src.core.config import settings
 from src.core.database import get_db_session, engine
+from src.api.v1.router import api_router
 
 
 @asynccontextmanager
@@ -23,6 +24,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=settings.PROJECT_NAME, version="1.0.0", lifespan=lifespan)
 
+app.include_router(api_router)
 
 @app.get("/health", tags=["System Probe"], status_code=status.HTTP_200_OK)
 async def health_check(session: AsyncSession = Depends(get_db_session)):
